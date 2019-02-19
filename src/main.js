@@ -2,6 +2,7 @@
 
 const mainFilter = document.querySelector(`.main__filter`);
 const boardTasks = document.querySelector(`.board__tasks`);
+
 const filters = [
   {
     name: `All`,
@@ -71,7 +72,6 @@ const renderFilter = (filter) => {
 };
 
 const renderAllFilters = (filtersArray) => {
-  clearNode(mainFilter);
   filtersArray.forEach((item) => renderFilter(item));
 };
 
@@ -218,12 +218,19 @@ const renderTaskCard = () => {
 };
 
 const renderAllTaskCards = (cardCount = 7) => {
-  clearNode(boardTasks);
   while (cardCount > 0) {
     renderTaskCard();
     cardCount--;
   }
 };
+
+mainFilter.addEventListener(`click`, (e) => {
+  const cardCount = randomInteger(1, 10);
+  if (e.target.tagName === `INPUT`) {
+    clearNode(boardTasks);
+    renderAllTaskCards(cardCount);
+  }
+});
 
 renderAllFilters(filters);
 renderAllTaskCards();
