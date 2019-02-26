@@ -1,47 +1,10 @@
-import {getRandomInteger, clearNode} from "./util";
+import {getRandomInteger, clearNode} from './util';
 import getFilterItem from './get-filter-item';
 import getTaskCard from './get-task-card';
+import {filters, getTaskData} from './data';
 
 const mainFilter = document.querySelector(`.main__filter`);
 const boardTasks = document.querySelector(`.board__tasks`);
-
-const filters = [
-  {
-    name: `All`,
-    checked: true,
-    disabled: false
-  },
-  {
-    name: `Overdue`,
-    checked: false,
-    disabled: true
-  },
-  {
-    name: `Today`,
-    checked: false,
-    disabled: true
-  },
-  {
-    name: `Favorites`,
-    checked: false,
-    disabled: false
-  },
-  {
-    name: `Repeating`,
-    checked: false,
-    disabled: false
-  },
-  {
-    name: `Tags`,
-    checked: false,
-    disabled: false
-  },
-  {
-    name: `Archive`,
-    checked: false,
-    disabled: false
-  }
-];
 
 const renderFilter = (filter) => {
   mainFilter.insertAdjacentHTML(`beforeend`, getFilterItem(filter));
@@ -52,7 +15,8 @@ const renderAllFilters = (filtersArray) => {
 };
 
 const renderTaskCard = () => {
-  boardTasks.insertAdjacentHTML(`beforeend`, getTaskCard());
+  const task = getTaskData();
+  boardTasks.insertAdjacentHTML(`beforeend`, getTaskCard(task));
 };
 
 const renderAllTaskCards = (cardCount = 7) => {
@@ -62,9 +26,9 @@ const renderAllTaskCards = (cardCount = 7) => {
   }
 };
 
-mainFilter.addEventListener(`click`, (e) => {
+mainFilter.addEventListener(`click`, (evt) => {
   const cardCount = getRandomInteger(1, 10);
-  if (e.target.tagName === `INPUT`) {
+  if (evt.target.tagName === `INPUT`) {
     clearNode(boardTasks);
     renderAllTaskCards(cardCount);
   }

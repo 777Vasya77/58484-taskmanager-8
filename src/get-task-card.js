@@ -1,15 +1,20 @@
-export default () => {
-  return `<article class="card card--blue">
+import {getDateFromTimestamp, getTimeFromTimestamp} from './util';
+import getTagsMarkdown from './get-tags-markdown';
+import getCardColorsMarkdown from './get-card-colors-markdown';
+import getRepeatDaysMarkdown from './get-repeat-days-markdown';
+
+export default (task) => {
+  return `<article class="card card--${task.color}">
             <form class="card__form" method="get">
               <div class="card__inner">
                 <div class="card__control">
                   <button type="button" class="card__btn card__btn--edit">
                     edit
                   </button>
-                  <button type="button" class="card__btn card__btn--archive">
+                  <button type="button" class="card__btn card__btn--archive ${task.isDone ? `card__btn--disabled` : ``}">
                     archive
                   </button>
-                  <button type="button" class="card__btn card__btn--favorites card__btn--disabled">
+                  <button type="button" class="card__btn card__btn--favorites ${task.isFavorite ? `card__btn--disabled` : ``}">
                     favorites
                   </button>
                 </div>
@@ -22,7 +27,7 @@ export default () => {
 
                 <div class="card__textarea-wrap">
                   <label>
-                    <textarea class="card__text" placeholder="Start typing your text here..." name="text"></textarea>
+                    <textarea class="card__text" placeholder="Start typing your text here..." name="text">${task.title}</textarea>
                   </label>
                 </div>
 
@@ -35,10 +40,10 @@ export default () => {
 
                       <fieldset class="card__date-deadline">
                         <label class="card__input-deadline-wrap">
-                          <input class="card__date" type="text" placeholder="23 September" name="date" value="23 September">
+                          <input class="card__date" type="text" placeholder="${getDateFromTimestamp(task.dueDate)}" name="date" value="${getDateFromTimestamp(task.dueDate)}">
                         </label>
                         <label class="card__input-deadline-wrap">
-                          <input class="card__time" type="text" placeholder="11:15 PM" name="time" value="11:15 PM">
+                          <input class="card__time" type="text" placeholder="${getTimeFromTimestamp(task.dueDate)}" name="time" value="${getTimeFromTimestamp(task.dueDate)}">
                         </label>
                       </fieldset>
 
@@ -48,55 +53,14 @@ export default () => {
 
                       <fieldset class="card__repeat-days">
                         <div class="card__repeat-days-inner">
-                          <input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-mo-6" name="repeat" value="mo">
-                          <label class="card__repeat-day" for="repeat-mo-6">mo</label>
-                          <input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-tu-6" name="repeat" value="tu" checked="">
-                          <label class="card__repeat-day" for="repeat-tu-6">tu</label>
-                          <input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-we-6" name="repeat" value="we">
-                          <label class="card__repeat-day" for="repeat-we-6">we</label>
-                          <input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-th-6" name="repeat" value="th">
-                          <label class="card__repeat-day" for="repeat-th-6">th</label>
-                          <input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-fr-6" name="repeat" value="fr" checked="">
-                          <label class="card__repeat-day" for="repeat-fr-6">fr</label>
-                          <input class="visually-hidden card__repeat-day-input" type="checkbox" name="repeat" value="sa" id="repeat-sa-6">
-                          <label class="card__repeat-day" for="repeat-sa-6">sa</label>
-                          <input class="visually-hidden card__repeat-day-input" type="checkbox" id="repeat-su-6" name="repeat" value="su" checked="">
-                          <label class="card__repeat-day" for="repeat-su-6">su</label>
+                            ${getRepeatDaysMarkdown(task.repeatingDays)}
                         </div>
                       </fieldset>
                     </div>
 
                     <div class="card__hashtag">
                       <div class="card__hashtag-list">
-                        <span class="card__hashtag-inner">
-                          <input type="hidden" name="hashtag" value="repeat" class="card__hashtag-hidden-input">
-                          <button type="button" class="card__hashtag-name">
-                            #repeat
-                          </button>
-                          <button type="button" class="card__hashtag-delete">
-                            delete
-                          </button>
-                        </span>
-
-                        <span class="card__hashtag-inner">
-                          <input type="hidden" name="hashtag" value="repeat" class="card__hashtag-hidden-input">
-                          <button type="button" class="card__hashtag-name">
-                            #cinema
-                          </button>
-                          <button type="button" class="card__hashtag-delete">
-                            delete
-                          </button>
-                        </span>
-
-                        <span class="card__hashtag-inner">
-                          <input type="hidden" name="hashtag" value="repeat" class="card__hashtag-hidden-input">
-                          <button type="button" class="card__hashtag-name">
-                            #entertaiment
-                          </button>
-                          <button type="button" class="card__hashtag-delete">
-                            delete
-                          </button>
-                        </span>
+                        ${getTagsMarkdown(task.tags)}
                       </div>
 
                       <label>
@@ -107,22 +71,13 @@ export default () => {
 
                   <label class="card__img-wrap">
                     <input type="file" class="card__img-input visually-hidden" name="img">
-                    <img src="img/sample-img.jpg" alt="task picture" class="card__img">
+                    <img src="${task.picture}" alt="task picture" class="card__img">
                   </label>
 
                   <div class="card__colors-inner">
                     <h3 class="card__colors-title">Color</h3>
                     <div class="card__colors-wrap">
-                      <input type="radio" id="color-black-6" class="card__color-input card__color-input--black visually-hidden" name="color" value="black">
-                      <label for="color-black-6" class="card__color card__color--black">black</label>
-                      <input type="radio" id="color-yellow-6" class="card__color-input card__color-input--yellow visually-hidden" name="color" value="yellow">
-                      <label for="color-yellow-6" class="card__color card__color--yellow">yellow</label>
-                      <input type="radio" id="color-blue-6" class="card__color-input card__color-input--blue visually-hidden" name="color" value="blue">
-                      <label for="color-blue-6" class="card__color card__color--blue">blue</label>
-                      <input type="radio" id="color-green-6" class="card__color-input card__color-input--green visually-hidden" name="color" value="green" checked="">
-                      <label for="color-green-6" class="card__color card__color--green">green</label>
-                      <input type="radio" id="color-pink-6" class="card__color-input card__color-input--pink visually-hidden" name="color" value="pink">
-                      <label for="color-pink-6" class="card__color card__color--pink">pink</label>
+                        ${getCardColorsMarkdown(task.color)}
                     </div>
                   </div>
                 </div>
