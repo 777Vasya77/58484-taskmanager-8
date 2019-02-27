@@ -1,10 +1,4 @@
-const colors = [
-  `black`,
-  `yellow`,
-  `blue`,
-  `green`,
-  `pink`,
-];
+import {colors} from './data';
 
 export default (color) => {
   return colors.map((item) => {

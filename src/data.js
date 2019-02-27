@@ -38,6 +38,14 @@ export const filters = [
   }
 ];
 
+export const colors = [
+  `black`,
+  `yellow`,
+  `blue`,
+  `green`,
+  `pink`,
+];
+
 export const getTaskData = () => (
   {
     title: [
@@ -56,13 +64,7 @@ export const getTaskData = () => (
       `walk`,
     ]),
     picture: `//picsum.photos/100/100?r=${Math.random()}`,
-    color: [
-      `black`,
-      `yellow`,
-      `blue`,
-      `green`,
-      `pink`,
-    ][getRandomInteger(0, 4)],
+    color: colors[getRandomInteger(0, 4)],
     repeatingDays: {
       'mo': getRandomBoolean(),
       'tu': getRandomBoolean(),
