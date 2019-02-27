@@ -1,9 +1,9 @@
-const TAGS_COUNT = 3;
+import {getRandomInteger} from "./util";
 
 export default (tags) => {
   const tagsMarkdown = [...tags]
     .sort(() => 0.5 - Math.random())
-    .splice(0, TAGS_COUNT)
+    .slice(0, getRandomInteger(0, 3))
     .map((item) => {
       return `<span class="card__hashtag-inner">
               <input type="hidden" name="hashtag" value="repeat" class="card__hashtag-hidden-input">
