@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const clearNode = (node) => {
   while (node.firstChild) {
     node.removeChild(node.firstChild);
@@ -14,27 +16,20 @@ export const getRandomBoolean = () => {
 };
 
 export const getRandomTimestamp = () => {
-  return Date.now() + 1 + Math.floor(Math.random() * 7) * 24 * 60 * 60 * 1000;
+  return moment()
+    .add(`${getRandomInteger(1, 7)}`, `days`)
+    .subtract(`${getRandomInteger(1, 7)}`, `days`)
+    .add(`${getRandomInteger(1, 24)}`, `hours`)
+    .subtract(`${getRandomInteger(1, 24)}`, `hours`)
+    .add(`${getRandomInteger(1, 60)}`, `minutes`)
+    .subtract(`${getRandomInteger(1, 60)}`, `minutes`)
+    .format(`X`);
 };
 
 export const getDateFromTimestamp = (timestamp) => {
-  const months = [`January`, `February`, `March`, `April`, `May`, `June `, `July`, `August`, `September`, `October`, `November`, `December`];
-  const date = new Date(timestamp * 1000);
-  const day = date.getDate();
-  const month = months[date.getMonth()];
-
-  return `${day} ${month}`;
+  return moment.unix(timestamp).format(`DD MMMM`);
 };
 
 export const getTimeFromTimestamp = (timestamp) => {
-  const date = new Date(timestamp * 1000);
-  let hours = date.getHours();
-  let minutes = date.getMinutes();
-  const ampm = hours >= 12 ? `pm` : `am`;
-
-  hours = hours % 12;
-  hours = hours ? hours : 12;
-  minutes = minutes < 10 ? `0${minutes}` : minutes;
-
-  return `${hours}:${minutes} ${ampm.toUpperCase()}`;
+  return moment.unix(timestamp).format(`LT`);
 };
