@@ -3,6 +3,7 @@ import getFilterItem from './get-filter-item';
 import getTaskCard from './get-task-card';
 import {filters, getTaskData} from './data';
 
+const DEFAULT_TASKS_COUNT = 7;
 const mainFilter = document.querySelector(`.main__filter`);
 const boardTasks = document.querySelector(`.board__tasks`);
 
@@ -14,23 +15,25 @@ const renderAllFilters = (filtersArray) => {
   filtersArray.forEach((item) => renderFilter(item));
 };
 
-const renderTaskCard = () => {
-  const task = getTaskData();
-  boardTasks.insertAdjacentHTML(`beforeend`, getTaskCard(task));
+const getAllTasks = (tasksCount = DEFAULT_TASKS_COUNT) => {
+  return new Array(tasksCount)
+    .fill(``)
+    .map(() => {
+      const taskData = getTaskData();
+      return getTaskCard(taskData);
+    })
+    .join(``);
 };
 
-const renderAllTaskCards = (cardCount = 7) => {
-  while (cardCount > 0) {
-    renderTaskCard();
-    cardCount--;
-  }
+const renderAllTaskCards = (tasksCount = DEFAULT_TASKS_COUNT) => {
+  boardTasks.insertAdjacentHTML(`beforeend`, getAllTasks(tasksCount));
 };
 
 mainFilter.addEventListener(`click`, (evt) => {
-  const cardCount = getRandomInteger(1, 10);
+  const tasksCount = getRandomInteger(1, 10);
   if (evt.target.tagName === `INPUT`) {
     clearNode(boardTasks);
-    renderAllTaskCards(cardCount);
+    renderAllTaskCards(tasksCount);
   }
 });
 
