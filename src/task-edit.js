@@ -1,7 +1,7 @@
 import {createElement} from './util';
 import moment from 'moment';
 
-export class TaskEdit {
+export default class TaskEdit {
 
   constructor(data) {
     this._title = data.title;
@@ -93,12 +93,22 @@ export class TaskEdit {
     this._onSubmit = fn;
   }
 
-  set onCancel(fn) {
-    this._onCancel = fn;
+  get element() {
+    return (this._element)
+      ? this._element
+      : this.render();
   }
 
-  get element() {
-    return this._element;
+  get repeatDaysMarkdown() {
+    return this._repeatDaysMarkdown;
+  }
+
+  get tagsMarkdown() {
+    return this._tagsMarkdown;
+  }
+
+  get colorsMarkdown() {
+    return this._colorsMarkdown;
   }
 
   get template() {
@@ -151,14 +161,14 @@ export class TaskEdit {
 
                       <fieldset class="card__repeat-days">
                         <div class="card__repeat-days-inner">
-                            ${this._repeatDaysMarkdown()}
+                            ${this.repeatDaysMarkdown()}
                         </div>
                       </fieldset>
                     </div>
 
                     <div class="card__hashtag">
                       <div class="card__hashtag-list">
-                        ${this._tagsMarkdown()}
+                        ${this.tagsMarkdown()}
                       </div>
 
                       <label>
@@ -175,7 +185,7 @@ export class TaskEdit {
                   <div class="card__colors-inner">
                     <h3 class="card__colors-title">Color</h3>
                     <div class="card__colors-wrap">
-                        ${this._colorsMarkdown()}
+                        ${this.colorsMarkdown()}
                     </div>
                   </div>
                 </div>
@@ -189,7 +199,7 @@ export class TaskEdit {
           </article>`.trim();
   }
 
-  bind() {
+  _bind() {
     this._element
       .querySelector(`.card__form`)
       .addEventListener(`submit`, this._onSubmitButtonClick.bind(this));
@@ -197,16 +207,16 @@ export class TaskEdit {
 
   render() {
     this._element = createElement(this.template);
-    this.bind();
+    this._bind();
     return this._element;
   }
 
-  unbind() {
-    this._element.removeEventListener(`click`, this._onSubmitButtonClick);
+  _unbind() {
+    this._element.removeEventListener(`click`, this._onSubmitButtonClick.bind(this));
   }
 
   unrender() {
-    this.unbind();
+    this._unbind();
     this._element = null;
   }
 

@@ -1,4 +1,4 @@
-import {getRandomBoolean, getRandomInteger, getRandomTags, getRandomTimestamp} from './util';
+import {getRandomArrayItems, getRandomBoolean, getRandomTags, getRandomTimestamp} from './util';
 
 export const filters = [
   {
@@ -38,7 +38,13 @@ export const filters = [
   }
 ];
 
-export const colors = [
+const titles = [
+  `Изучить теорию`,
+  `Сделать домашку`,
+  `Пройти интенсив на соточку`,
+];
+
+const colors = [
   `black`,
   `yellow`,
   `blue`,
@@ -58,15 +64,11 @@ const tags = new Set([
 
 export const getTaskData = () => (
   {
-    title: [
-      `Изучить теорию`,
-      `Сделать домашку`,
-      `Пройти интенсив на соточку`,
-    ][getRandomInteger(0, 2)],
+    title: getRandomArrayItems(titles, 1),
     dueDate: getRandomTimestamp(),
     tags: getRandomTags(tags),
     picture: `//picsum.photos/100/100?r=${Math.random()}`,
-    color: colors[getRandomInteger(0, 4)],
+    color: getRandomArrayItems(colors, 1),
     repeatingDays: {
       'mo': getRandomBoolean(),
       'tu': false,

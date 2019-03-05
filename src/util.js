@@ -37,3 +37,9 @@ export const getRandomTags = (tags) => {
     .sort(() => 0.5 - Math.random())
     .slice(0, getRandomInteger(0, 3));
 };
+
+export const getRandomArrayItems = (array, itemsCount) => {
+  return array
+    .sort(() => 0.5 - Math.random())
+    .slice(0, itemsCount);
+};

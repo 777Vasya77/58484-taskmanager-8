@@ -1,7 +1,7 @@
 import {createElement} from './util';
 import moment from 'moment';
 
-export class Task {
+export default class Task {
 
   constructor(data) {
     this._title = data.title;
@@ -53,12 +53,28 @@ export class Task {
     return typeof this._onEdit === `function` && this._onEdit();
   }
 
+  _bind() {
+    this._element
+      .querySelector(`.card__btn--edit`)
+      .addEventListener(`click`, this._onEditButtonClick.bind(this));
+  }
+
+  _unbind() {
+    this._element.removeEventListener(`click`, this._onEditButtonClick.bind(this));
+  }
+
   set onEdit(fn) {
     this._onEdit = fn;
   }
 
   get element() {
-    return this._element;
+    return (this._element)
+      ? this._element
+      : this.render();
+  }
+
+  get tagsMarkdown() {
+    return this._tagsMarkdown;
   }
 
   get template() {
@@ -103,7 +119,7 @@ export class Task {
 
                     <div class="card__hashtag">
                       <div class="card__hashtag-list">
-                        ${this._tagsMarkdown()}
+                        ${this.tagsMarkdown()}
                       </div>
                       
                     </div>
@@ -124,24 +140,14 @@ export class Task {
           </article>`.trim();
   }
 
-  bind() {
-    this._element
-      .querySelector(`.card__btn--edit`)
-      .addEventListener(`click`, this._onEditButtonClick.bind(this));
-  }
-
   render() {
     this._element = createElement(this.template);
-    this.bind();
+    this._bind();
     return this._element;
   }
 
-  unbind() {
-    this._element.removeEventListener(`click`, this._onEditButtonClick);
-  }
-
   unrender() {
-    this.unbind();
+    this._unbind();
     this._element = null;
   }
 

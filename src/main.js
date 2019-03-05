@@ -1,8 +1,8 @@
 import {getRandomInteger, clearNode} from './util';
 import getFilterItem from './get-filter-item';
 import {filters, getTaskData} from './data';
-import {Task} from './task';
-import {TaskEdit} from './task-edit';
+import Task from './task';
+import TaskEdit from './task-edit';
 
 const DEFAULT_TASKS_COUNT = 7;
 const mainFilter = document.querySelector(`.main__filter`);
