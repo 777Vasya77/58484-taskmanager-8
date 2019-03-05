@@ -37,12 +37,6 @@ const getAllTasks = (tasksCount = DEFAULT_TASKS_COUNT) => {
         taskEdit.unrender();
       };
 
-      taskEdit.onCancel = () => {
-        task.render();
-        boardTasks.replaceChild(task.element, taskEdit.element);
-        taskEdit.unrender();
-      };
-
       task.render();
       fragment.appendChild(task.element);
     });
