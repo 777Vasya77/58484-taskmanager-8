@@ -25,17 +25,20 @@ const getAllTasks = (tasksCount = DEFAULT_TASKS_COUNT) => {
       const task = new Task(taskData);
       const taskEdit = new TaskEdit(taskData);
 
-      task.onEdit = () => {
+      const renderEditTaskComponent = () => {
         taskEdit.render();
         boardTasks.replaceChild(taskEdit.element, task.element);
         task.unrender();
       };
-
-      taskEdit.onSubmit = () => {
+      const renderTaskComponent = () => {
         task.render();
         boardTasks.replaceChild(task.element, taskEdit.element);
         taskEdit.unrender();
       };
+
+      task.onEdit = renderEditTaskComponent;
+      taskEdit.onSubmit = renderTaskComponent;
+      taskEdit.onCancel = renderTaskComponent;
 
       task.render();
       fragment.appendChild(task.element);

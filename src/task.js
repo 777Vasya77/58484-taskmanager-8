@@ -50,7 +50,7 @@ export default class Task {
   }
 
   _onEditButtonClick() {
-    return typeof this._onEdit === `function` && this._onEdit();
+    return this._onEdit();
   }
 
   _bind() {
@@ -64,7 +64,9 @@ export default class Task {
   }
 
   set onEdit(fn) {
-    this._onEdit = fn;
+    if (fn === `function`) {
+      this._onEdit = fn;
+    }
   }
 
   get element() {

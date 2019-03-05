@@ -13,6 +13,7 @@ export default class TaskEdit {
 
     this._element = null;
     this._onSubmit = null;
+    this._onCancel = null;
 
     this._colors = [
       `black`,
@@ -36,6 +37,12 @@ export default class TaskEdit {
   _onSubmitButtonClick(evt) {
     evt.preventDefault();
     return typeof this._onSubmit === `function` && this._onSubmit();
+  }
+
+  _onEscKeyup(evt) {
+    if (evt.key === `Escape`) {
+      this._onCancel();
+    }
   }
 
   _getDueDate() {
@@ -89,8 +96,28 @@ export default class TaskEdit {
     }).join(``);
   }
 
+  _bind() {
+    document.addEventListener(`keyup`, this._onEscKeyup.bind(this));
+    this._element
+      .querySelector(`.card__form`)
+      .addEventListener(`submit`, this._onSubmitButtonClick.bind(this));
+  }
+
+  _unbind() {
+    document.removeEventListener(`keypress`, this._onEscKeyup.bind(this));
+    this._element.removeEventListener(`click`, this._onSubmitButtonClick.bind(this));
+  }
+
   set onSubmit(fn) {
-    this._onSubmit = fn;
+    if (typeof fn === `function`) {
+      this._onSubmit = fn;
+    }
+  }
+
+  set onCancel(fn) {
+    if (typeof fn === `function`) {
+      this._onCancel = fn;
+    }
   }
 
   get element() {
@@ -199,20 +226,10 @@ export default class TaskEdit {
           </article>`.trim();
   }
 
-  _bind() {
-    this._element
-      .querySelector(`.card__form`)
-      .addEventListener(`submit`, this._onSubmitButtonClick.bind(this));
-  }
-
   render() {
     this._element = createElement(this.template);
     this._bind();
     return this._element;
-  }
-
-  _unbind() {
-    this._element.removeEventListener(`click`, this._onSubmitButtonClick.bind(this));
   }
 
   unrender() {
