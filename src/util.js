@@ -26,10 +26,20 @@ export const getRandomTimestamp = () => {
     .format(`X`);
 };
 
-export const getDateFromTimestamp = (timestamp) => {
-  return moment.unix(timestamp).format(`DD MMMM`);
+export const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+  return newElement.firstChild;
 };
 
-export const getTimeFromTimestamp = (timestamp) => {
-  return moment.unix(timestamp).format(`LT`);
+export const getRandomTags = (tags) => {
+  return [...tags]
+    .sort(() => 0.5 - Math.random())
+    .slice(0, getRandomInteger(0, 3));
+};
+
+export const getRandomArrayItems = (array, itemsCount) => {
+  return array
+    .sort(() => 0.5 - Math.random())
+    .slice(0, itemsCount);
 };

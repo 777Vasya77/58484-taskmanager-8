@@ -1,7 +1,8 @@
 import {getRandomInteger, clearNode} from './util';
 import getFilterItem from './get-filter-item';
-import getTaskCard from './get-task-card';
 import {filters, getTaskData} from './data';
+import Task from './task';
+import TaskEdit from './task-edit';
 
 const DEFAULT_TASKS_COUNT = 7;
 const mainFilter = document.querySelector(`.main__filter`);
@@ -16,17 +17,38 @@ const renderAllFilters = (filtersArray) => {
 };
 
 const getAllTasks = (tasksCount = DEFAULT_TASKS_COUNT) => {
-  return new Array(tasksCount)
+  const fragment = document.createDocumentFragment();
+  new Array(tasksCount)
     .fill(``)
-    .map(() => {
+    .forEach(() => {
       const taskData = getTaskData();
-      return getTaskCard(taskData);
-    })
-    .join(``);
+      const task = new Task(taskData);
+      const taskEdit = new TaskEdit(taskData);
+
+      const renderEditTaskComponent = () => {
+        taskEdit.render();
+        boardTasks.replaceChild(taskEdit.element, task.element);
+        task.unrender();
+      };
+      const renderTaskComponent = () => {
+        task.render();
+        boardTasks.replaceChild(task.element, taskEdit.element);
+        taskEdit.unrender();
+      };
+
+      task.onEdit = renderEditTaskComponent;
+      taskEdit.onSubmit = renderTaskComponent;
+      taskEdit.onCancel = renderTaskComponent;
+
+      task.render();
+      fragment.appendChild(task.element);
+    });
+
+  return fragment;
 };
 
 const renderAllTaskCards = (tasksCount = DEFAULT_TASKS_COUNT) => {
-  boardTasks.insertAdjacentHTML(`beforeend`, getAllTasks(tasksCount));
+  boardTasks.appendChild(getAllTasks(tasksCount));
 };
 
 mainFilter.addEventListener(`click`, (evt) => {
