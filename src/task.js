@@ -13,6 +13,8 @@ export default class Task {
 
     this._element = null;
     this._onEdit = null;
+
+    this._onEditButtonClick = this._onEditButtonClick.bind(this);
   }
 
   _isRepeated() {
@@ -49,16 +51,20 @@ export default class Task {
       }).join(``);
   }
 
+  _onEditButtonClick() {
+    this._onEdit();
+  }
+
   _bind() {
     this._element
       .querySelector(`.card__btn--edit`)
-      .addEventListener(`click`, this._onEdit);
+      .addEventListener(`click`, this._onEditButtonClick);
   }
 
   _unbind() {
     this._element
       .querySelector(`.card__btn--edit`)
-      .removeEventListener(`click`, this._onEdit);
+      .removeEventListener(`click`, this._onEditButtonClick);
   }
 
   set onEdit(fn) {

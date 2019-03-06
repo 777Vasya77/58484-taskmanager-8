@@ -15,6 +15,9 @@ export default class TaskEdit {
     this._onSubmit = null;
     this._onCancel = null;
 
+    this._onEscKeyup = this._onEscKeyup.bind(this);
+    this._onSubmitButtonClick = this._onSubmitButtonClick.bind(this);
+
     this._colors = [
       `black`,
       `yellow`,
@@ -85,18 +88,29 @@ export default class TaskEdit {
     }).join(``);
   }
 
+  _onEscKeyup(evt) {
+    if (evt.key === `Escape`) {
+      this._onCancel();
+    }
+  }
+
+  _onSubmitButtonClick(evt) {
+    evt.preventDefault();
+    this._onSubmit();
+  }
+
   _bind() {
-    document.addEventListener(`keyup`, this._onCancel);
+    document.addEventListener(`keyup`, this._onEscKeyup);
     this._element
       .querySelector(`.card__form`)
-      .addEventListener(`submit`, this._onSubmit);
+      .addEventListener(`submit`, this._onSubmitButtonClick);
   }
 
   _unbind() {
-    document.removeEventListener(`keyup`, this._onCancel);
+    document.removeEventListener(`keyup`, this._onEscKeyup);
     this._element
       .querySelector(`.card__form`)
-      .removeEventListener(`submit`, this._onSubmit);
+      .removeEventListener(`submit`, this._onSubmitButtonClick);
   }
 
   set onSubmit(fn) {
