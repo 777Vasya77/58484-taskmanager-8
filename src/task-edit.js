@@ -96,7 +96,7 @@ export default class TaskEdit {
     document.removeEventListener(`keyup`, this._onCancel);
     this._element
       .querySelector(`.card__form`)
-      .removeEventListener(`click`, this._onSubmit);
+      .removeEventListener(`submit`, this._onSubmit);
   }
 
   set onSubmit(fn) {
