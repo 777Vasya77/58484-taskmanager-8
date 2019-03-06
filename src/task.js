@@ -49,22 +49,20 @@ export default class Task {
       }).join(``);
   }
 
-  _onEditButtonClick() {
-    return this._onEdit();
-  }
-
   _bind() {
     this._element
       .querySelector(`.card__btn--edit`)
-      .addEventListener(`click`, this._onEditButtonClick.bind(this));
+      .addEventListener(`click`, this._onEdit);
   }
 
   _unbind() {
-    this._element.removeEventListener(`click`, this._onEditButtonClick.bind(this));
+    this._element
+      .querySelector(`.card__btn--edit`)
+      .removeEventListener(`click`, this._onEdit);
   }
 
   set onEdit(fn) {
-    if (fn === `function`) {
+    if (typeof fn === `function`) {
       this._onEdit = fn;
     }
   }
@@ -73,10 +71,6 @@ export default class Task {
     return (this._element)
       ? this._element
       : this.render();
-  }
-
-  get tagsMarkdown() {
-    return this._tagsMarkdown;
   }
 
   get template() {
@@ -121,7 +115,7 @@ export default class Task {
 
                     <div class="card__hashtag">
                       <div class="card__hashtag-list">
-                        ${this.tagsMarkdown()}
+                        ${this._tagsMarkdown()}
                       </div>
                       
                     </div>

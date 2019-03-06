@@ -34,17 +34,6 @@ export default class TaskEdit {
     return moment().unix() > this._dueDate;
   }
 
-  _onSubmitButtonClick(evt) {
-    evt.preventDefault();
-    return typeof this._onSubmit === `function` && this._onSubmit();
-  }
-
-  _onEscKeyup(evt) {
-    if (evt.key === `Escape`) {
-      this._onCancel();
-    }
-  }
-
   _getDueDate() {
     return moment.unix(this._dueDate).format(`DD MMMM`);
   }
@@ -97,15 +86,17 @@ export default class TaskEdit {
   }
 
   _bind() {
-    document.addEventListener(`keyup`, this._onEscKeyup.bind(this));
+    document.addEventListener(`keyup`, this._onCancel);
     this._element
       .querySelector(`.card__form`)
-      .addEventListener(`submit`, this._onSubmitButtonClick.bind(this));
+      .addEventListener(`submit`, this._onSubmit);
   }
 
   _unbind() {
-    document.removeEventListener(`keypress`, this._onEscKeyup.bind(this));
-    this._element.removeEventListener(`click`, this._onSubmitButtonClick.bind(this));
+    document.removeEventListener(`keyup`, this._onCancel);
+    this._element
+      .querySelector(`.card__form`)
+      .removeEventListener(`click`, this._onSubmit);
   }
 
   set onSubmit(fn) {
@@ -124,18 +115,6 @@ export default class TaskEdit {
     return (this._element)
       ? this._element
       : this.render();
-  }
-
-  get repeatDaysMarkdown() {
-    return this._repeatDaysMarkdown;
-  }
-
-  get tagsMarkdown() {
-    return this._tagsMarkdown;
-  }
-
-  get colorsMarkdown() {
-    return this._colorsMarkdown;
   }
 
   get template() {
@@ -188,14 +167,14 @@ export default class TaskEdit {
 
                       <fieldset class="card__repeat-days">
                         <div class="card__repeat-days-inner">
-                            ${this.repeatDaysMarkdown()}
+                            ${this._repeatDaysMarkdown()}
                         </div>
                       </fieldset>
                     </div>
 
                     <div class="card__hashtag">
                       <div class="card__hashtag-list">
-                        ${this.tagsMarkdown()}
+                        ${this._tagsMarkdown()}
                       </div>
 
                       <label>
@@ -212,7 +191,7 @@ export default class TaskEdit {
                   <div class="card__colors-inner">
                     <h3 class="card__colors-title">Color</h3>
                     <div class="card__colors-wrap">
-                        ${this.colorsMarkdown()}
+                        ${this._colorsMarkdown()}
                     </div>
                   </div>
                 </div>
