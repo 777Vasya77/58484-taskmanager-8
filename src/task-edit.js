@@ -1,9 +1,11 @@
-import {createElement} from './util';
 import moment from 'moment';
+import Component from './component';
 
-export default class TaskEdit {
+export default class TaskEdit extends Component {
 
   constructor(data) {
+    super();
+
     this._title = data.title;
     this._tags = data.tags;
     this._color = data.color;
@@ -11,7 +13,6 @@ export default class TaskEdit {
     this._dueDate = data.dueDate;
     this._repeatingDays = data.repeatingDays;
 
-    this._element = null;
     this._onSubmit = null;
     this._onCancel = null;
 
@@ -25,110 +26,7 @@ export default class TaskEdit {
       `green`,
       `pink`,
     ];
-  }
 
-  _isRepeated() {
-    return Object
-      .values(this._repeatingDays)
-      .some((item) => item === true);
-  }
-
-  _isOverdue() {
-    return moment().unix() > this._dueDate;
-  }
-
-  _getDueDate() {
-    return moment.unix(this._dueDate).format(`DD MMMM`);
-  }
-
-  _getDueTime() {
-    return moment.unix(this._dueDate).format(`LT`);
-  }
-
-  _repeatDaysMarkdown() {
-    return Object.entries(this._repeatingDays).map(([key, value]) => {
-      return `<input 
-                class="visually-hidden card__repeat-day-input" 
-                type="checkbox" 
-                id="repeat-${key}-6" 
-                name="repeat" 
-                value="${key}" 
-                ${value ? `checked` : ``}>
-            <label class="card__repeat-day" for="repeat-${key}-6">${key}</label>`.trim();
-    }).join(``);
-  }
-
-  _tagsMarkdown() {
-    return [...this._tags]
-      .map((item) => {
-        return `<span class="card__hashtag-inner">
-              <input type="hidden" name="hashtag" value="repeat" class="card__hashtag-hidden-input">
-              <button type="button" class="card__hashtag-name">
-                #${item}
-              </button>
-              <button type="button" class="card__hashtag-delete">
-                delete
-              </button>
-            </span>
-        `.trim();
-      }).join(``);
-  }
-
-  _colorsMarkdown() {
-    return this._colors.map((item) => {
-      return `
-      <input type="radio" 
-        id="color-${item}-6" 
-        class="card__color-input card__color-input--${item} visually-hidden" 
-        name="color" 
-        value="${item}"
-        ${item === this._color ? `checked` : ``}>
-      <label for="color-${item}-6" class="card__color card__color--${item}">${item}</label>
-    `.trim();
-    }).join(``);
-  }
-
-  _onEscKeyup(evt) {
-    if (evt.key === `Escape`) {
-      this._onCancel();
-    }
-  }
-
-  _onSubmitButtonClick(evt) {
-    evt.preventDefault();
-    this._onSubmit();
-  }
-
-  _bind() {
-    document.addEventListener(`keyup`, this._onEscKeyup);
-    this._element
-      .querySelector(`.card__form`)
-      .addEventListener(`submit`, this._onSubmitButtonClick);
-  }
-
-  _unbind() {
-    document.removeEventListener(`keyup`, this._onEscKeyup);
-    this._element
-      .querySelector(`.card__form`)
-      .removeEventListener(`submit`, this._onSubmitButtonClick);
-  }
-
-  set onSubmit(fn) {
-    if (typeof fn === `function`) {
-      this._onSubmit = fn;
-    }
-  }
-
-  set onCancel(fn) {
-    if (typeof fn === `function`) {
-      this._onCancel = fn;
-    }
-  }
-
-  get element() {
-    return (this._element)
-      ? this._element
-      : this.render();
   }
 
   get template() {
@@ -219,15 +117,102 @@ export default class TaskEdit {
           </article>`.trim();
   }
 
-  render() {
-    this._element = createElement(this.template);
-    this._bind();
-    return this._element;
+  set onSubmit(fn) {
+    if (typeof fn === `function`) {
+      this._onSubmit = fn;
+    }
   }
 
-  unrender() {
-    this._unbind();
-    this._element = null;
+  set onCancel(fn) {
+    if (typeof fn === `function`) {
+      this._onCancel = fn;
+    }
+  }
+
+  _isRepeated() {
+    return Object
+      .values(this._repeatingDays)
+      .some((item) => item === true);
+  }
+
+  _isOverdue() {
+    return moment().unix() > this._dueDate;
+  }
+
+  _getDueDate() {
+    return moment.unix(this._dueDate).format(`DD MMMM`);
+  }
+
+  _getDueTime() {
+    return moment.unix(this._dueDate).format(`LT`);
+  }
+
+  _repeatDaysMarkdown() {
+    return Object.entries(this._repeatingDays).map(([key, value]) => {
+      return `<input 
+                class="visually-hidden card__repeat-day-input" 
+                type="checkbox" 
+                id="repeat-${key}-6" 
+                name="repeat" 
+                value="${key}" 
+                ${value ? `checked` : ``}>
+            <label class="card__repeat-day" for="repeat-${key}-6">${key}</label>`.trim();
+    }).join(``);
+  }
+
+  _tagsMarkdown() {
+    return [...this._tags]
+      .map((item) => {
+        return `<span class="card__hashtag-inner">
+              <input type="hidden" name="hashtag" value="repeat" class="card__hashtag-hidden-input">
+              <button type="button" class="card__hashtag-name">
+                #${item}
+              </button>
+              <button type="button" class="card__hashtag-delete">
+                delete
+              </button>
+            </span>
+        `.trim();
+      }).join(``);
+  }
+
+  _colorsMarkdown() {
+    return this._colors.map((item) => {
+      return `
+      <input type="radio" 
+        id="color-${item}-6" 
+        class="card__color-input card__color-input--${item} visually-hidden" 
+        name="color" 
+        value="${item}"
+        ${item === this._color ? `checked` : ``}>
+      <label for="color-${item}-6" class="card__color card__color--${item}">${item}</label>
+    `.trim();
+    }).join(``);
+  }
+
+  _bind() {
+    document.addEventListener(`keyup`, this._onEscKeyup);
+    this._element
+      .querySelector(`.card__form`)
+      .addEventListener(`submit`, this._onSubmitButtonClick);
+  }
+
+  _unbind() {
+    document.removeEventListener(`keyup`, this._onEscKeyup);
+    this._element
+      .querySelector(`.card__form`)
+      .removeEventListener(`submit`, this._onSubmitButtonClick);
+  }
+
+  _onEscKeyup(evt) {
+    if (evt.key === `Escape`) {
+      this._onCancel();
+    }
+  }
+
+  _onSubmitButtonClick(evt) {
+    evt.preventDefault();
+    this._onSubmit();
   }
 
 }
