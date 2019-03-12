@@ -37,7 +37,20 @@ const getAllTasks = (tasksCount = DEFAULT_TASKS_COUNT) => {
       };
 
       task.onEdit = renderEditTaskComponent;
-      taskEdit.onSubmit = renderTaskComponent;
+
+      taskEdit.onSubmit = (newData) => {
+        taskData.title = newData.title;
+        taskData.tags = newData.tags;
+        taskData.color = newData.color;
+        taskData.repeatingDays = newData.repeatingDays;
+        taskData.dueDate = newData.dueDate;
+
+        task.update(taskData);
+        task.render();
+        boardTasks.replaceChild(task.element, taskEdit.element);
+        taskEdit.unrender();
+      };
+
       taskEdit.onCancel = renderTaskComponent;
 
       task.render();

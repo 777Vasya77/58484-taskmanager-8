@@ -87,6 +87,15 @@ export default class Task extends Component {
     }
   }
 
+  update(data) {
+    this._title = data.title;
+    this._tags = data.tags;
+    this._color = data.color;
+    this._picture = data.picture;
+    this._dueDate = data.dueDate;
+    this._repeatingDays = data.repeatingDays;
+  }
+
   _isRepeated() {
     return Object
       .values(this._repeatingDays)
