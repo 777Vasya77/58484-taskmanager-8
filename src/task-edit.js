@@ -282,12 +282,24 @@ export default class TaskEdit extends Component {
 
   static createMapper(target) {
     return {
-      hashtag: (value) => target.tags.add(value),
-      text: (value) => target.title = value,
-      color: (value) => target.color = value,
-      picture: (value) => target.picture = value,
-      repeat: (value) => target.repeatingDays[value] = true,
-      date: (value) => target.dueDate[value],
+      hashtag(value) {
+        target.tags.add(value);
+      },
+      text(value) {
+        target.title = value;
+      },
+      color(value) {
+        target.color = value;
+      },
+      picture(value) {
+        target.picture = value;
+      },
+      repeat(value) {
+        target.repeatingDays[value] = true;
+      },
+      date(value) {
+        target.dueDate[value] = value;
+      },
     };
   }
 
