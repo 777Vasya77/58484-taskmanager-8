@@ -1,35 +1,42 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import {tasksData} from './data';
 
 const tagsCtx = document.querySelector(`.statistic__tags`);
 
-const getTags = () => {
+const getTags = (tasksData) => {
   const tags = [];
   tasksData.map((item) => item.tags.forEach((it) => tags.push(it)));
   return tags;
 };
 
-const tagsData = getTags().reduce((prev, cur) => {
-  const prop = `#${cur}`;
-  prev[prop] = (prev[prop] || 0) + 1;
-  return prev;
-}, {});
-
-const tagsChartData = {
-  labels: Object.keys(tagsData),
-  data: Object.values(tagsData)
+const getTagsData = (tags) => {
+  return tags.reduce((prev, cur) => {
+    const prop = `#${cur}`;
+    prev[prop] = (prev[prop] || 0) + 1;
+    return prev;
+  }, {});
 };
 
 export default {
+  _labels: [],
+  _data: [],
+  init(tasksData) {
+    const tags = getTags(tasksData);
+    const tagsChartData = getTagsData(tags);
+
+    this._labels = Object.keys(tagsChartData);
+    this._data = Object.values(tagsChartData);
+
+    this.render();
+  },
   render() {
     return new Chart(tagsCtx, {
       plugins: [ChartDataLabels],
       type: `pie`,
       data: {
-        labels: tagsChartData.labels,
+        labels: this._labels,
         datasets: [{
-          data: tagsChartData.data,
+          data: this._data,
           backgroundColor: [`#ff3cb9`, `#ffe125`, `#0c5cdd`, `#000000`, `#31b55c`, `#e91e63`, `#607d8b`]
         }]
       },

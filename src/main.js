@@ -21,8 +21,8 @@ controlStatistic.addEventListener(`click`, () => {
 
   flatpickr(`.statistic__period-input`, {mode: `range`, altInput: true, altFormat: `j M`, dateFormat: `j M`});
 
-  tagsChart.render();
-  colorsChart.render();
+  tagsChart.init(tasksData);
+  colorsChart.init(tasksData);
 });
 
 controlTask.addEventListener(`click`, () => {

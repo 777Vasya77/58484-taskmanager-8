@@ -1,36 +1,45 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import {tasksData} from './data';
 
 const colorsCtx = document.querySelector(`.statistic__colors`);
 
-const getColors = () => {
+const getColors = (tasksData) => {
   const colors = [];
   tasksData.map((item) => colors.push(...item.color));
   return colors;
 };
 
-const colorsData = getColors().reduce((prev, cur) => {
-  const prop = `#${cur}`;
-  prev[prop] = (prev[prop] || 0) + 1;
-  return prev;
-}, {});
-
-const colorsChartData = {
-  labels: Object.keys(colorsData),
-  data: Object.values(colorsData)
+const getColorsData = (colors) => {
+  return colors.reduce((prev, cur) => {
+    const prop = `#${cur}`;
+    prev[prop] = (prev[prop] || 0) + 1;
+    return prev;
+  }, {});
 };
 
 export default {
+  _labels: [],
+  _data: [],
+  _colors: [],
+  init(tasksData) {
+    const colors = getColors(tasksData);
+    const colorsChartData = getColorsData(colors);
+
+    this._labels = Object.keys(colorsChartData);
+    this._data = Object.values(colorsChartData);
+    this._colors = Array.from(new Set(colors));
+
+    this.render();
+  },
   render() {
     return new Chart(colorsCtx, {
       plugins: [ChartDataLabels],
       type: `pie`,
       data: {
-        labels: colorsChartData.labels,
+        labels: this._labels,
         datasets: [{
-          data: colorsChartData.data,
-          backgroundColor: Array.from(new Set(getColors()))
+          data: this._data,
+          backgroundColor: this._colors
         }]
       },
       options: {
