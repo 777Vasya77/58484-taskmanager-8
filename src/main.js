@@ -19,13 +19,13 @@ const getFilters = (filtersData) => {
       switch (filter.name) {
         case filterName.TODAY:
           renderTaskCards(
-              tasksData.filter((it) => it.date === moment().unix())
+              tasksData.filter((it) => it.dueDate === moment().unix())
           );
           return;
 
         case filterName.OVERDUE:
           renderTaskCards(
-              tasksData.filter((it) => it.date < moment().unix())
+              tasksData.filter((it) => it.dueDate < moment().unix())
           );
           return;
 

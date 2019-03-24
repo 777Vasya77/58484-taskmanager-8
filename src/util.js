@@ -19,10 +19,6 @@ export const getRandomTimestamp = () => {
   return moment()
     .add(`${getRandomInteger(1, 7)}`, `days`)
     .subtract(`${getRandomInteger(1, 7)}`, `days`)
-    .add(`${getRandomInteger(1, 24)}`, `hours`)
-    .subtract(`${getRandomInteger(1, 24)}`, `hours`)
-    .add(`${getRandomInteger(1, 60)}`, `minutes`)
-    .subtract(`${getRandomInteger(1, 60)}`, `minutes`)
     .format(`X`);
 };
 
