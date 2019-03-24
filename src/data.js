@@ -1,39 +1,50 @@
 import {getRandomArrayItems, getRandomBoolean, getRandomTags, getRandomTimestamp} from './util';
 
 const DEFAULT_TASKS_COUNT = 7;
+
+export const filterName = {
+  ALL: `all`,
+  OVERDUE: `overdue`,
+  TODAY: `today`,
+  FAVORITES: `favorites`,
+  REPEATING: `repeating`,
+  TAGS: `tags`,
+  ARCHIVE: `archive`,
+};
+
 export const filters = [
   {
-    name: `All`,
+    name: filterName.ALL,
     checked: true,
     disabled: false
   },
   {
-    name: `Overdue`,
+    name: filterName.OVERDUE,
     checked: false,
     disabled: true
   },
   {
-    name: `Today`,
+    name: filterName.TODAY,
     checked: false,
     disabled: true
   },
   {
-    name: `Favorites`,
+    name: filterName.FAVORITES,
     checked: false,
     disabled: false
   },
   {
-    name: `Repeating`,
+    name: filterName.REPEATING,
     checked: false,
     disabled: false
   },
   {
-    name: `Tags`,
+    name: filterName.TAGS,
     checked: false,
     disabled: false
   },
   {
-    name: `Archive`,
+    name: filterName.ARCHIVE,
     checked: false,
     disabled: false
   }

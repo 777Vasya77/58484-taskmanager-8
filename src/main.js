@@ -1,18 +1,54 @@
-import {getRandomInteger, clearNode, removeFromArray} from './util';
-import getFilterItem from './get-filter-item';
-import {filters, tasksData} from './data';
+import {removeFromArray} from './util';
+import {filters, tasksData, filterName} from './data';
+import moment from 'moment';
 import Task from './task';
 import TaskEdit from './task-edit';
+import Filter from './filter';
 
 const mainFilter = document.querySelector(`.main__filter`);
 const boardTasks = document.querySelector(`.board__tasks`);
 
-const renderFilter = (filter) => {
-  mainFilter.insertAdjacentHTML(`beforeend`, getFilterItem(filter));
+const getFilters = (filtersData) => {
+  const fragment = document.createDocumentFragment();
+
+  filtersData.forEach((item) => {
+    const filter = new Filter(item);
+    filter.render();
+
+    filter.onFilter = () => {
+      switch (filter.name) {
+        case filterName.TODAY:
+          renderTaskCards(
+              tasksData.filter((it) => it.date === moment().unix())
+          );
+          return;
+
+        case filterName.OVERDUE:
+          renderTaskCards(
+              tasksData.filter((it) => it.date < moment().unix())
+          );
+          return;
+
+        case filterName.REPEATING:
+          renderTaskCards(
+              tasksData.filter((it) => Object.values(it.repeatingDays).some((repeat) => repeat))
+          );
+          return;
+
+        default:
+          renderTaskCards();
+          return;
+      }
+    };
+
+    fragment.appendChild(filter.element);
+  });
+
+  return fragment;
 };
 
-const renderAllFilters = (filtersArray) => {
-  filtersArray.forEach((item) => renderFilter(item));
+const renderFilters = (filtersArray = filters) => {
+  mainFilter.appendChild(getFilters(filtersArray));
 };
 
 const getTasks = (tasks) => {
@@ -66,14 +102,6 @@ const renderTaskCards = (tasks = tasksData) => {
   boardTasks.appendChild(getTasks(tasks));
 };
 
-mainFilter.addEventListener(`click`, (evt) => {
-  const tasksCount = getRandomInteger(1, 10);
-  if (evt.target.tagName === `INPUT`) {
-    clearNode(boardTasks);
-    renderTaskCards(tasksCount);
-  }
-});
-
-renderAllFilters(filters);
+renderFilters();
 renderTaskCards();
 
