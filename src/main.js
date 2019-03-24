@@ -1,12 +1,32 @@
 import {removeFromArray} from './util';
 import {filters, tasksData, filterName} from './data';
 import moment from 'moment';
+import flatpickr from 'flatpickr';
 import Task from './task';
 import TaskEdit from './task-edit';
 import Filter from './filter';
+import tagsChart from './tags-chart';
 
 const mainFilter = document.querySelector(`.main__filter`);
 const boardTasks = document.querySelector(`.board__tasks`);
+const controlStatistic = document.querySelector(`label[for=control__statistic]`);
+const controlTask = document.querySelector(`label[for=control__task]`);
+const boardContainer = document.querySelector(`.board.container`);
+const statisticContainer = document.querySelector(`.statistic`);
+
+controlStatistic.addEventListener(`click`, () => {
+  boardContainer.classList.add(`visually-hidden`);
+  statisticContainer.classList.remove(`visually-hidden`);
+
+  flatpickr(`.statistic__period-input`, {mode: `range`, altInput: true, altFormat: `j M`, dateFormat: `j M`});
+
+  tagsChart.render();
+});
+
+controlTask.addEventListener(`click`, () => {
+  statisticContainer.classList.add(`visually-hidden`);
+  boardContainer.classList.remove(`visually-hidden`);
+});
 
 const getFilters = (filtersData) => {
   const fragment = document.createDocumentFragment();
@@ -104,4 +124,3 @@ const renderTaskCards = (tasks = tasksData) => {
 
 renderFilters();
 renderTaskCards();
-
