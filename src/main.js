@@ -19,7 +19,29 @@ controlStatistic.addEventListener(`click`, () => {
   boardContainer.classList.add(`visually-hidden`);
   statisticContainer.classList.remove(`visually-hidden`);
 
-  flatpickr(`.statistic__period-input`, {mode: `range`, altInput: true, altFormat: `j M`, dateFormat: `j M`});
+  const startWeek = moment().startOf(`isoWeek`).format(`DD MMM`);
+  const endWeek = moment().endOf(`isoWeek`).format(`DD MMM`);
+
+  flatpickr(`.statistic__period-input`, {
+    mode: `range`,
+    altInput: true,
+    altFormat: `j M`,
+    dateFormat: `j M`,
+    defaultDate: [startWeek, endWeek],
+    onChange: (selectedDates) => {
+      const [from, to] = selectedDates.map((item) => moment(item).format(`X`));
+
+      if (from && to) {
+        const filteredTaskData = tasksData.filter((item) => {
+          return item.dueDate >= from && item.dueDate <= to;
+        });
+
+        tagsChart.init(filteredTaskData);
+        colorsChart.init(filteredTaskData);
+      }
+
+    }
+  });
 
   tagsChart.init(tasksData);
   colorsChart.init(tasksData);
