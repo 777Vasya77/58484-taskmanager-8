@@ -63,7 +63,7 @@ const getFilters = (filtersData) => {
       switch (filter.name) {
         case filterName.TODAY:
           renderTaskCards(
-              tasksData.filter((it) => it.dueDate === moment().unix())
+              tasksData.filter((it) => new Date(it.dueDate * 1000).getDate() === +moment().format(`DD`))
           );
           return;
 
