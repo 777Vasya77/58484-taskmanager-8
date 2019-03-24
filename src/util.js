@@ -43,3 +43,8 @@ export const getRandomArrayItems = (array, itemsCount) => {
     .sort(() => 0.5 - Math.random())
     .slice(0, itemsCount);
 };
+
+export const removeFromArray = (array, item) => {
+  const index = array.findIndex((it) => it === item);
+  array.splice(index, 1);
+};

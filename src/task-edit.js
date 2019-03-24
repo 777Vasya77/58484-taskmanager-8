@@ -17,6 +17,7 @@ export default class TaskEdit extends Component {
 
     this._onSubmit = null;
     this._onCancel = null;
+    this._onDelete = null;
 
     this._state = {
       isDate: false,
@@ -27,6 +28,7 @@ export default class TaskEdit extends Component {
     this._onChangeRepeated = this._onChangeRepeated.bind(this);
     this._onEscKeyup = this._onEscKeyup.bind(this);
     this._onSubmitButtonClick = this._onSubmitButtonClick.bind(this);
+    this._onDeleteButtonClick = this._onDeleteButtonClick.bind(this);
 
     this._colors = [
       `black`,
@@ -144,6 +146,12 @@ export default class TaskEdit extends Component {
     }
   }
 
+  set onDelete(fn) {
+    if (typeof fn === `function`) {
+      this._onDelete = fn;
+    }
+  }
+
   update(data) {
     this._title = data.title;
     this._tags = data.tags;
@@ -228,6 +236,9 @@ export default class TaskEdit extends Component {
     this._element
       .querySelector(`.card__repeat-toggle`)
       .addEventListener(`click`, this._onChangeRepeated);
+    this._element
+      .querySelector(`.card__delete`)
+      .addEventListener(`click`, this._onDeleteButtonClick);
 
     if (this._state.isDate) {
       flatpickr(`.card__date`, {altInput: true, altFormat: `j F`, dateFormat: `j F`});
@@ -249,6 +260,12 @@ export default class TaskEdit extends Component {
     this._element
       .querySelector(`.card__repeat-toggle`)
       .removeEventListener(`click`, this._onChangeRepeated);
+    this._element
+      .querySelector(`.card__delete`)
+      .removeEventListener(`click`, this._onDeleteButtonClick);
+
+    flatpickr(this._element.querySelector(`.card__date`)).destroy();
+    flatpickr(this._element.querySelector(`.card__time`)).destroy();
   }
 
   _onEscKeyup(evt) {
@@ -264,6 +281,11 @@ export default class TaskEdit extends Component {
     this._onSubmit(newData);
 
     this.update(newData);
+  }
+
+  _onDeleteButtonClick(evt) {
+    evt.preventDefault();
+    this._onDelete();
   }
 
   _onChangeDate() {

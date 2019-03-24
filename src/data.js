@@ -1,5 +1,6 @@
 import {getRandomArrayItems, getRandomBoolean, getRandomTags, getRandomTimestamp} from './util';
 
+const DEFAULT_TASKS_COUNT = 7;
 export const filters = [
   {
     name: `All`,
@@ -82,3 +83,5 @@ export const getTaskData = () => (
     isDone: getRandomBoolean(),
   }
 );
+
+export const tasksData = new Array(DEFAULT_TASKS_COUNT).fill(``).map(() => getTaskData());
