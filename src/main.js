@@ -6,6 +6,7 @@ import Task from './task';
 import TaskEdit from './task-edit';
 import Filter from './filter';
 import tagsChart from './tags-chart';
+import colorsChart from './colors-chart';
 
 const mainFilter = document.querySelector(`.main__filter`);
 const boardTasks = document.querySelector(`.board__tasks`);
@@ -21,6 +22,7 @@ controlStatistic.addEventListener(`click`, () => {
   flatpickr(`.statistic__period-input`, {mode: `range`, altInput: true, altFormat: `j M`, dateFormat: `j M`});
 
   tagsChart.render();
+  colorsChart.render();
 });
 
 controlTask.addEventListener(`click`, () => {
